@@ -1,0 +1,12 @@
+package com.argus.incidentintelligence.enums;
+
+public enum TimelineEventType {
+    PERFORMANCE_DEGRADATION,
+    THRESHOLD_EXCEEDED,
+    FIRST_FAILED_CHECK,
+    INCIDENT_OPENED,
+    NOTIFICATION_DISPATCHED,
+    RECOVERY_DETECTED,
+    RECOVERY_CONFIRMED,
+    INCIDENT_RESOLVED
+}
