@@ -4,7 +4,7 @@
 
 ARGUS is a full-stack infrastructure monitoring and incident intelligence platform. Built with Java, Spring Boot, React, and MySQL, the application enables operators to monitor the availability, response characteristics, and operational health of HTTP/HTTPS endpoints. 
 
-Unlike traditional monitoring systems that simply report whether a service is up or down, ARGUS organizes observed failure evidence, matches current incidents with historical patterns, calculates conservative confidence scores, generates structured investigation recommendations, and reconstructs chronological incident timelines.
+Unlike traditional monitoring systems that simply report whether a service is up or down, ARGUS organizes observed failure evidence, compares current incidents with historical patterns, calculates conservative confidence scores, generates structured investigation recommendations, and reconstructs chronological incident timelines.
 
 While ARGUS offers an optional AI Provider integration to enrich incident analyses with narrative summaries, the core Incident Intelligence system is fully deterministic and evidence-based. If an external AI provider fails or is unconfigured, the deterministic analysis pipeline continues to function without interruption.
 
@@ -41,26 +41,14 @@ ARGUS structures incident investigation context, reduces manual correlation requ
 
 The incident intelligence engine uses a multi-stage, deterministic pipeline. When an incident is triggered, the system builds an `IncidentContext` and routes it through the following processing sequence:
 
-```
-  Incident Context
-         │
-         ▼
-Historical Similarity
-         │
-         ▼
- Evidence Extraction
-         │
-         ▼
-Confidence Evaluation
-         │
-         ▼
-Investigation Recommendations
-         │
-         ▼
-Timeline Reconstruction
-         │
-         ▼
-Persisted Analysis Snapshot
+```mermaid
+graph TD
+    A["Incident Context"] --> B["Historical Similarity"]
+    B --> C["Evidence Extraction"]
+    C --> D["Confidence Evaluation"]
+    D --> E["Investigation Recommendations"]
+    E --> F["Timeline Reconstruction"]
+    F --> G["Persisted Analysis Snapshot"]
 ```
 
 ### Pipeline Stages
@@ -80,34 +68,34 @@ ARGUS is built as a single, modular Spring Boot monolith backend interacting wit
 
 ```mermaid
 graph TD
-    subgraph Frontend [React SPA]
-        UI[React Components / Recharts]
-        Ctx[React Context / Prefs]
-        State[Local Component State]
+    subgraph Frontend ["React SPA"]
+        UI["React Components / Recharts"]
+        Ctx["React Context / PlatformPreferencesContext"]
+        State["Local Component State"]
     end
 
-    subgraph Security [Spring Security]
-        JWT[JWT Authentication Filter]
+    subgraph Security ["Spring Security"]
+        JWT["JWT Authentication Filter"]
     end
 
-    subgraph Backend [Spring Boot App]
-        Controller[REST Controllers]
-        Service[Domain Services]
-        IntellEngine[Incident Intelligence Engine]
-        Repo[JPA Repositories]
+    subgraph Backend ["Spring Boot App"]
+        Controller["REST Controllers"]
+        Service["Domain Services"]
+        IntellEngine["Incident Intelligence Engine"]
+        Repo["JPA Repositories"]
     end
 
-    subgraph Database [Storage]
-        MySQL[(MySQL)]
+    subgraph Database ["Storage"]
+        MySQL[("MySQL")]
     end
 
-    UI -->|REST API Calls| JWT
+    UI -->|"REST API Calls"| JWT
     JWT --> Controller
     Controller --> Service
     Service --> IntellEngine
     Service --> Repo
     IntellEngine --> Repo
-    Repo -->|Hibernate / JPA| MySQL
+    Repo -->|"Hibernate / JPA"| MySQL
 ```
 
 ### Core Java Packages
@@ -205,25 +193,18 @@ argus/
 
 The scheduling engine continuously tracks configured targets. The monitoring cycle progresses as follows:
 
-```
-  [Monitor Scheduled]
-           │
-           ▼
-   [Endpoint Checked]
-           │
-           ├─── (Success) ──> [History Persisted] ──> [Active Incident Resolved]
-           │                                      ──> [Consecutive Failures Reset to 0]
-           │
-           └─── (Failure) ──> [History Persisted] ──> [Consecutive Failures Incremented]
-                                    │
-                                    ▼
-                         [Threshold Reached?]
-                                    │
-                            ┌───────┴───────┐
-                          (Yes)            (No)
-                            │               │
-                            ▼               ▼
-                    [Incident Opened]   [Wait for Next Check]
+```mermaid
+graph TD
+    A["Monitor Scheduled"] --> B["Endpoint Checked"]
+    B -->|Success| C["History Persisted"]
+    C --> D["Active Incident Resolved"]
+    D --> E["Consecutive Failures Reset to 0"]
+
+    B -->|Failure| F["History Persisted"]
+    F --> G["Consecutive Failures Incremented"]
+    G --> H["Threshold Reached?"]
+    H -->|Yes| I["Incident Opened"]
+    H -->|No| J["Wait for Next Check"]
 ```
 
 1. **Schedule Check**: The scheduling worker pools monitors and dispatches tasks based on their configured interval.
@@ -395,7 +376,7 @@ npm run build
 
 ## Current Project Status
 
-ARGUS is substantially implemented, compiles successfully, and is undergoing final repository preparation, documentation review, and deployment setup. All 18 backend tests pass, and the React frontend builds successfully for production without compiler warnings or bundle chunk issues.
+ARGUS is substantially implemented and publicly source-controlled. The backend test suite passes, the frontend production build succeeds, and the project is undergoing final manual QA and deployment preparation.
 
 ---
 
@@ -410,7 +391,7 @@ ARGUS is substantially implemented, compiles successfully, and is undergoing fin
 
 ## Author
 
-Operational development and architecture prepared by the core project author.
+**Vinay S. Katnur**
 
 ---
 
