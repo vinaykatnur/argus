@@ -57,6 +57,7 @@ class AuthenticationServiceTests {
         refreshTokenService = mock(RefreshTokenService.class);
         authEmailService = mock(AuthEmailService.class);
         authProperties = mock(AuthProperties.class);
+        when(authProperties.isRequireEmailVerification()).thenReturn(true);
 
         authenticationService = new AuthenticationService(
                 userRepository,

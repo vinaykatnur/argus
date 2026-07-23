@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:${SERVER_PORT:8080}}
 
 spring:
   application:
@@ -36,6 +36,7 @@ argus:
     verification-token-expiration-minutes: ${VERIFICATION_TOKEN_EXPIRATION_MINUTES:30}
     password-reset-token-expiration-minutes: ${PASSWORD_RESET_TOKEN_EXPIRATION_MINUTES:15}
     frontend-base-url: ${FRONTEND_BASE_URL:http://localhost:5173}
+    require-email-verification: ${REQUIRE_EMAIL_VERIFICATION:false}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
   monitoring:
@@ -52,3 +53,9 @@ argus:
     ai:
       encryption-secret: ${AI_CREDENTIAL_ENCRYPTION_SECRET:${JWT_SECRET:}}
       timeout-seconds: ${AI_PROVIDER_TIMEOUT_SECONDS:20}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

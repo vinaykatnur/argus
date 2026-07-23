@@ -17,6 +17,8 @@ public class AuthProperties {
     @Min(5)
     private long passwordResetTokenExpirationMinutes;
 
+    private boolean requireEmailVerification = false;
+
     @NotBlank
     private String frontendBaseUrl;
 
@@ -34,6 +36,14 @@ public class AuthProperties {
 
     public void setPasswordResetTokenExpirationMinutes(long passwordResetTokenExpirationMinutes) {
         this.passwordResetTokenExpirationMinutes = passwordResetTokenExpirationMinutes;
+    }
+
+    public boolean isRequireEmailVerification() {
+        return requireEmailVerification;
+    }
+
+    public void setRequireEmailVerification(boolean requireEmailVerification) {
+        this.requireEmailVerification = requireEmailVerification;
     }
 
     public String getFrontendBaseUrl() {
