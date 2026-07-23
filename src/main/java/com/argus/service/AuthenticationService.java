@@ -203,7 +203,7 @@ public class AuthenticationService {
         if (!user.isEnabled()) {
             throw new AccountDisabledException("Account is disabled");
         }
-        if (!user.isEmailVerified()) {
+        if (authProperties.isRequireEmailVerification() && !user.isEmailVerified()) {
             throw new AccountNotVerifiedException("Email verification is required");
         }
     }

@@ -285,17 +285,20 @@ Sanitized environment configurations are defined using system environment variab
 # General Properties
 SPRING_PROFILES_ACTIVE=dev
 SERVER_PORT=8080
+PORT=8080
 
 # Database Properties
 MYSQL_URL=jdbc:mysql://localhost:3306/argus_dev?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
 MYSQL_USERNAME=your_mysql_username
 MYSQL_PASSWORD=your_mysql_password
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
 # Authentication Setup
 JWT_ISSUER=argus
 JWT_SECRET=your_jwt_secret_at_least_32_characters
 JWT_ACCESS_TOKEN_EXPIRATION_MINUTES=15
 JWT_REFRESH_TOKEN_EXPIRATION_DAYS=7
+REQUIRE_EMAIL_VERIFICATION=false
 
 # Token Configurations
 VERIFICATION_TOKEN_EXPIRATION_MINUTES=30
@@ -369,7 +372,7 @@ npm run build
 ## Configuration and Production Notes
 
 1. **Profiles**: Use `SPRING_PROFILES_ACTIVE=dev` for local testing. Use `SPRING_PROFILES_ACTIVE=prod` in staging/production environments.
-2. **Schema Management**: The `dev` profile utilizes Hibernate's `ddl-auto: update` strategy. The `prod` profile enforces `ddl-auto: validate` to prevent automatic schema modifications in production.
+2. **Schema Management**: The `dev` profile utilizes Hibernate's `ddl-auto: update` strategy. The `prod` profile allows configuration of Hibernate's `ddl-auto` strategy (via `SPRING_JPA_HIBERNATE_DDL_AUTO`), defaulting to `update` to allow automated first-time database schema creation on cloud platforms, but can be set to `validate` to prevent automatic modifications.
 3. **Secrets Handling**: Do not write production API keys, database passwords, or JWT secrets to files inside the source tree. Supply them via system environment variables.
 
 ---

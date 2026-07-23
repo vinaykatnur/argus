@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_ARGUS_API_BASE_URL || 'http://localhost:8080',
+  baseURL: import.meta.env.VITE_ARGUS_API_BASE_URL || (typeof window !== 'undefined' && window.location.port !== '5173' ? window.location.origin : 'http://localhost:8080'),
   timeout: 20000,
 });
 
@@ -90,7 +90,7 @@ api.interceptors.response.use(
     }
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_ARGUS_API_BASE_URL || 'http://localhost:8080'}/api/v1/auth/refresh-token`, {
+      const res = await axios.post(`${import.meta.env.VITE_ARGUS_API_BASE_URL || (typeof window !== 'undefined' && window.location.port !== '5173' ? window.location.origin : 'http://localhost:8080')}/api/v1/auth/refresh-token`, {
         refreshToken: rToken,
       });
       const { accessToken, refreshToken: newRefreshToken } = res.data;
